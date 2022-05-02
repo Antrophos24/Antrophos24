@@ -7,8 +7,8 @@ class Pers():
     def __init__(self, damage=900):
         self.damage = damage
         '''если показатели брони меньше силы удара, то вычитаем из показателей жизней разницу силы удара и брони'''
-        if self.steel < int(self.damage):
-            self.health = self.health - int(self.damage) + self.steel
+        if self.steel < int(damage):
+            self.health = self.health - int(damage) + self.steel
 
     def dead(self):
         if self.health > 0:
