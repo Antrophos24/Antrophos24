@@ -1,0 +1,36 @@
+# import datetime
+import pandas as pd
+
+'''Open csv files'''
+data4 = pd.read_csv('data1.csv')
+data2 = pd.read_csv('data3.csv')
+
+'''Define tables wish the necessary columns'''
+students = pd.DataFrame(data2, columns=['student_id', 'age', 'region', 'gender', 'level'])
+homeworks = pd.DataFrame(data4, columns=['completeness', 'score', 'started_at', 'finished_at', 'lesson_id'])
+# df = pd.DataFrame(data2)
+# likes = pd.DataFrame(data4)
+# teachers = pd.DataFrame(data3, columns=['teacher_id', 'education'])
+
+'''drop duplicates by column'''
+students.drop_duplicates(subset=['student_id'], keep=False)
+
+'''combine tables by common column'''
+df = pd.merge(left=homeworks, right=students, on='student_id')
+
+'''difference in dates'''
+# now = datetime.datetime.today()
+df['finished_at'] = pd.to_datetime(df['finished_at'])
+df['started_at'] = pd.to_datetime(df['started_at'])
+df['diff'] = df['finished_at'].sub(df['started_at'], axis=0).dt.total_seconds()
+
+'''filter table'''
+df = df.loc[df['completeness'] > 75]
+df = df.loc[df['completeness'] < 100]
+df = df.loc[df['score'] <= 10]
+df = df.loc[df['diff'] >= 0]
+df = df.loc[df['age'] >= 17]
+df = df.loc[df['age'] <= 50]
+
+'''write to new csv file'''
+df.to_csv('new_data.csv')
